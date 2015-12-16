@@ -28,6 +28,8 @@ from __helpers import __print_ok, __print_info, __print_err, _verbose
 aac = None
 
 def __aac2_init():
+  # signal handlers ?
+
   # fscheck
   __helpers.fscheck()
 
