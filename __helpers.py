@@ -16,6 +16,8 @@
 #  MA 02110-1301, USA.
 #
 
+import shutil
+import stat
 import subprocess
 import sys
 import os
@@ -29,6 +31,23 @@ def _aac2_dir():
 
 def _verbose():
   return __cfg.__verbose
+
+def which(program):
+  def is_exe(fpath):
+    return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+  fpath, fname = os.path.split(program)
+  if fpath:
+    if is_exe(program):
+      return program
+  else:
+    for path in os.environ["PATH"].split(os.pathsep):
+      path = path.strip('"')
+      exe_file = os.path.join(path, program)
+      if is_exe(exe_file):
+        return exe_file
+
+  return None
 
 def fscheck():
   __print_info("checking fs:\n")
@@ -58,6 +77,33 @@ def depcheck():
   ret = subprocess.call(cmd)
   if ret != 0:
     quit()
+
+  # install repo
+  __print_info("  installing repo:" + "\n")
+
+  __print_info("    checking previous install... ")
+  sys.stdout.flush()
+
+  if which("repo") is None:
+    __print_err("fail" + "\n")
+    sys.stdout.flush()
+
+    # new install repo
+    __print_info("    installing repo... ")
+
+    try:
+      shutil.copyfile((_aac2_dir() + '/binaries/repo'), (os.environ['HOME'] + '/bin/repo'))
+    except Exception as arg:
+      __print_err("fail" + "\n")
+      sys.stdout.flush()
+      exit(-1)
+    __print_ok ("ok" + "\n")
+  else:
+    __print_ok("ok" + "\n")
+
+  # chmod/chown repo
+  st = os.stat((os.environ['HOME'] + '/bin/repo'))
+  os.chmod((os.environ['HOME'] + '/bin/repo'), st.st_mode | stat.S_IEXEC)
 
 # OS Colors
 __osc = {
