@@ -16,16 +16,14 @@
 #  MA 02110-1301, USA.
 #
 
-from __meta__ import (
-    __title__,
-    __summary__,
-    __url__,
-    __version__,
-    __author__,
-    __email__,
-    __license__,
-)
+import sys
 
-__verbose = False
+from __helpers import __print_err, __print_info, __print_ok
 
-__rom_manifests_folder = 'rom_manifests/'
+def getmanifests():
+  __print_info("checking manifests dir... ")
+
+  # to write
+
+  __print_ok ( "ok" + "\n" )
+  sys.stdout.flush()

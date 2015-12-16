@@ -22,6 +22,7 @@ import argparse
 
 import __cfg
 import __helpers
+import __sync_helpers
 
 from __helpers import __print_ok, __print_info, __print_err, _verbose
 
@@ -40,8 +41,8 @@ def __aac2_init():
   __aac2_sync()
 
 def __aac2_sync():
-
-  print ( "gee, i have to write 'sync' this yet." )
+  # fetch rom manifests
+  __sync_helpers.getmanifests()
 
   # call next fn in line
   __aac2_compile()
