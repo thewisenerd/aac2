@@ -41,8 +41,12 @@ def __aac2_init():
   __aac2_sync()
 
 def __aac2_sync():
+  # init rom manifests
+  __sync_helpers.initmanifests()
+
   # fetch rom manifests
-  __sync_helpers.getmanifests()
+
+  # list rom manifests
 
   # call next fn in line
   __aac2_compile()

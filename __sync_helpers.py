@@ -16,14 +16,28 @@
 #  MA 02110-1301, USA.
 #
 
+import os
 import sys
 
-from __helpers import __print_err, __print_info, __print_ok
+import __cfg
 
-def getmanifests():
+from __helpers import __print_err, __print_info, __print_ok, _aac2_dir
+
+def getmanifestsfolder():
+  # add support for setting manifests folder
+  return _aac2_dir() + '/' + __cfg.__rom_manifests_folder
+
+def initmanifests():
   __print_info("checking manifests dir... ")
 
-  # to write
-
-  __print_ok ( "ok" + "\n" )
-  sys.stdout.flush()
+  if os.path.isdir(getmanifestsfolder()):
+    if len([x for x in os.listdir(getmanifestsfolder()) if x.endswith(".manifest.json")]):
+      __print_ok ( "ok" + "\n" )
+    else:
+      __print_err ( "fail" + "\n" )
+      sys.stdout.flush()
+      exit(-1)
+  else:
+    __print_err ( "fail" + "\n" )
+    sys.stdout.flush()
+    exit(-1)
