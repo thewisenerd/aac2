@@ -18,21 +18,40 @@
 #  MA 02110-1301, USA.
 #
 
+import argparse
+
 import __cfg
 import __helpers
 
-from __helpers import __print_ok, __print_info, __print_err
+from __helpers import __print_ok, __print_info, __print_err, _verbose
 
 aac = None
 
-def __aac2():
-  __print_ok (__helpers.getprogramtitle() + "\n")
-
-  # parse cmdline
-  __helpers.cmdlineparse()
-
+def __aac2_init():
   # fscheck
   __helpers.fscheck()
 
+  # check dependencies
+  __helpers.depcheck()
+
+def __aac2_run():
+  print ( "gee, i have to write this yet." )
+
 if (__name__ == "__main__"):
-  __aac2()
+  parser = argparse.ArgumentParser()
+
+  parser.add_argument("action", help="action", nargs="?", choices=["init", "run"])
+
+  parser.add_argument("-v", "--verbose", help="be more verbose", action="store_true")
+
+  args = parser.parse_args()
+
+  if args.verbose:
+    __cfg.__verbose = True
+
+  if args.action in [None, "init"]:
+    __aac2_init()
+  elif args.action == "run":
+    __aac2_run()
+  else:
+    __print_err ("something went wrong.")

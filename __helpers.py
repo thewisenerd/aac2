@@ -16,34 +16,21 @@
 #  MA 02110-1301, USA.
 #
 
+import subprocess
 import sys
 import os
+from inspect import getsourcefile
 
 import __cfg
 
-def getprogramtitle():
-  return (__cfg.__title__ + " v" + __cfg.__version__)
+def _aac2_dir():
+  return os.path.dirname(os.path.abspath(getsourcefile(lambda:0)))
 
-def cmdlineparse():
-  __print_info("parsing cmdline... ")
-  argv_length = len(sys.argv)
-  if (argv_length == 1):
-    __print_ok("done\n")
-    return;
-  for key,value in enumerate(sys.argv):
-    if (key == 0):
-      continue;
-    _a = value[1:].split('=')
-    if _a[0] == 'v':
-      __cfg.__verbose = True
-      #print ("set verbose to true")
-    elif _a[0] == '-help':
-      print ("see /DOCUMENTATION.txt for help")
-      quit()
-  __print_ok("done\n")
+def _verbose():
+  return __cfg.__verbose
 
 def fscheck():
-  __print_info("checking fs... \n")
+  __print_info("checking fs:\n")
 
   # os check
   __print_info("  checking os... ")
@@ -60,6 +47,16 @@ def fscheck():
     quit()
   else:
     __print_ok("ok\n")
+
+def depcheck():
+  __print_info("checking dependencies:" + "\n")
+  __print_info("  getting root... ")
+  sys.stdout.flush()
+  # gksudo ?
+  cmd = ['sudo', 'python3', _aac2_dir() + '/__install_dependencies.py']
+  ret = subprocess.call(cmd)
+  if ret != 0:
+    quit()
 
 # OS Colors
 __osc = {
