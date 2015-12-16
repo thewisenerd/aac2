@@ -105,6 +105,22 @@ def depcheck():
   st = os.stat((os.environ['HOME'] + '/bin/repo'))
   os.chmod((os.environ['HOME'] + '/bin/repo'), st.st_mode | stat.S_IEXEC)
 
+  __print_info("    checking path... ")
+  # add ~/bin/repo to path?
+  if (os.environ['HOME'] + '/bin') in os.environ["PATH"].split(os.pathsep):
+    __print_ok ("ok" + "\n")
+    sys.stdout.flush()
+  else:
+    # append path to file here
+    # try/catch here?
+    with open(os.environ['HOME'] + '/.bashrc', "a") as f:
+      f.write("\n") # prevent {no }newline at eof issues
+      f.write("export PATH=~/bin:${PATH}")
+      f.write("\n") # better safe than sorry
+      f.close()
+    __print_ok ("ok" + "\n")
+    sys.stdout.flush()
+
 # OS Colors
 __osc = {
   'red'    : '\033[31m',
