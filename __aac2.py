@@ -18,23 +18,12 @@
 #  MA 02110-1301, USA.
 #
 
-from tkinter import *
-
 import __cfg
 import __helpers
 
 from __helpers import __print_ok, __print_info, __print_err
 
 aac = None
-
-def __gui_init():
-  __print_info("initializing gui... ")
-  aac = Tk(None, None, __helpers.getprogramtitle(), 1, 0, None)
-  aac.minsize(width=400, height=440)
-  aac.maxsize(width=400, height=440)
-  aac.tk_setPalette("background", "white")
-  __print_ok("done\n")
-  aac.mainloop()
 
 def __aac2():
   __print_ok (__helpers.getprogramtitle() + "\n")
@@ -44,9 +33,6 @@ def __aac2():
 
   # fscheck
   __helpers.fscheck()
-
-  # gui init
-  __gui_init()
 
 if (__name__ == "__main__"):
   __aac2()
