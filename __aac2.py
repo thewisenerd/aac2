@@ -36,13 +36,23 @@ def __aac2_init():
   # check dependencies
   __helpers.depcheck()
 
-def __aac2_run():
-  print ( "gee, i have to write this yet." )
+  # call next fn in line
+  __aac2_sync()
+
+def __aac2_sync():
+
+  print ( "gee, i have to write 'sync' this yet." )
+
+  # call next fn in line
+  __aac2_compile()
+
+def __aac2_compile():
+  print ( "gee, i have to write 'compile' this yet." )
 
 if (__name__ == "__main__"):
   parser = argparse.ArgumentParser()
 
-  parser.add_argument("action", help="action", nargs="?", choices=["init", "run"])
+  parser.add_argument("action", help="action", nargs="?", choices=["init", "sync", "compile"])
 
   parser.add_argument("-v", "--verbose", help="be more verbose", action="store_true")
 
@@ -53,7 +63,9 @@ if (__name__ == "__main__"):
 
   if args.action in [None, "init"]:
     __aac2_init()
-  elif args.action == "run":
-    __aac2_run()
+  elif args.action == "sync":
+    __aac2_sync()
+  elif args.action == "compile":
+    __aac2_compile()
   else:
     __print_err ("something went wrong.")
