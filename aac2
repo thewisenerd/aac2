@@ -27,4 +27,9 @@ if [ $? -ne 0 ]; then
   sudo apt-get install -y python3-tk
 fi
 
+python3 -c "import apt" >/dev/null 2>/dev/null
+if [ $? -ne 0 ]; then
+  sudo apt-get install -y python-apt
+fi
+
 __aac2.py $*
