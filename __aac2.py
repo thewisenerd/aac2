@@ -68,4 +68,8 @@ if (__name__ == "__main__"):
   elif args.action == "compile":
     __aac2_compile()
   else:
-    __print_err ("something went wrong.")
+    __print_err ("something went wrong." + "\n")
+    sys.stdout.flush()
+    exit(-1)
+
+  exit()
