@@ -37,19 +37,17 @@ def __aac2_init():
   # check dependencies
   __helpers.depcheck()
 
-  # call next fn in line
-  __aac2_sync()
-
 def __aac2_sync():
   # init rom manifests
   __sync_helpers.initmanifests()
 
   # fetch rom manifests
+  __sync_helpers.readmanifests()
 
   # list rom manifests
+  __sync_helpers.rom_buffet()
 
-  # call next fn in line
-  __aac2_compile()
+  # init sync
 
 def __aac2_compile():
   print ( "gee, i have to write 'compile' this yet." )
