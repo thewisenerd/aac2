@@ -1,0 +1,23 @@
+{
+  "name": "OmniROM",
+  "source": "https://github.com/omnirom",
+  "manifest": "git://github.com/omnirom/android.git",
+  "branches": [
+    {
+      "name": "android-6.0",
+      "desc": "Marshmallow 6.0"
+    },
+    {
+      "name": "android-5.1",
+      "desc": "Lollipop 5.1"
+    },
+    {
+      "name": "android-5.0",
+      "desc": "Lollipop 5.0"
+    },
+    {
+      "name": "android-4.4",
+      "desc": "Kitkat 4.4.4"
+    }
+  ]
+}
