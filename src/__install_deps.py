@@ -24,7 +24,7 @@ import sys
 import apt
 import time
 
-from __helpers import __print_ok, __print_err, __print_info
+from __aac2.__helpers import __print_ok, __print_err, __print_info
 
 def last_apt_update():
   return ( time.time() - os.path.getmtime('/var/cache/apt/pkgcache.bin') )
@@ -38,7 +38,7 @@ def check_root():
   # get back to main prog 'getting root... '
   __print_ok ("ok" + "\n")
 
-def __install_dependencies():
+def __install_deps():
   __print_info ("  running apt-get update... ")
   sys.stdout.flush()
 
@@ -97,10 +97,7 @@ def __install_dependencies():
 def app():
   check_root()
 
-  __install_dependencies()
+  __install_deps()
 
 if (__name__ == "__main__"):
-  app()
-
-def __main__():
   app()
