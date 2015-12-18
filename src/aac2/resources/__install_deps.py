@@ -24,7 +24,14 @@ import sys
 import apt
 import time
 
-from __aac2.__helpers import __print_ok, __print_err, __print_info
+def __print_ok(_str):
+  print ('\033[32m' + _str + '\033[39m', end='')
+
+def __print_info(_str):
+  print ('\033[33m' + _str + '\033[39m', end='')
+
+def __print_err(_str):
+  print ('\033[31m' + _str + '\033[39m', end='')
 
 def last_apt_update():
   return ( time.time() - os.path.getmtime('/var/cache/apt/pkgcache.bin') )
@@ -59,7 +66,6 @@ def __install_deps():
   cache.open(None)
 
   __print_info ("  installing packages:" + "\n")
-  sys.stdout.flush()
 
   # - lib32z-dev
   # + lib32z1-dev
@@ -82,17 +88,14 @@ def __install_deps():
     sys.stdout.flush()
     if pkg.is_installed:
       __print_ok ( "ok" + "\n")
-      sys.stdout.flush()
     else:
       pkg.mark_install()
       try:
         cache.commit()
       except Exception as arg:
         __print_err("fail" + "\n")
-        sys.stdout.flush()
         exit(-1)
       __print_ok ( "ok" + "\n")
-      sys.stdout.flush()
 
 def app():
   check_root()
