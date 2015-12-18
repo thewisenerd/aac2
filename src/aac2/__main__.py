@@ -35,6 +35,8 @@ if (__name__ == "__main__"):
 
   parser.add_argument("--skip-repo-check", help="stop checking for .repo", action="store_true")
 
+  parser.add_argument("--skip-apt", help="stop packages check", action="store_true")
+
   args = parser.parse_args()
 
   if args.verbose:

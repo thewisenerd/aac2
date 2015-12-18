@@ -28,6 +28,7 @@ import tempfile
 from inspect import getsourcefile
 
 import __cfg
+import __main__
 
 def _aac2_dir():
   return os.path.dirname(os.path.abspath(getsourcefile(lambda:0)))
@@ -73,31 +74,33 @@ def fscheck():
 
 def depcheck():
   __print_info("checking dependencies:" + "\n")
-  __print_info("  getting root... ")
-  sys.stdout.flush()
 
-  # extract __install_deps.py
-  fp = tempfile.NamedTemporaryFile(delete=False)
-  fp.write(pkg_resources.resource_string(__name__, '__install_deps.py'))
-  fp.close()
+  if (__main__.args.skip_apt) == False:
+    __print_info("  getting root... ")
+    sys.stdout.flush()
 
-  # set executable
-  st = os.stat(fp.name)
-  os.chmod(fp.name, st.st_mode | stat.S_IEXEC)
+    # extract __install_deps.py
+    fp = tempfile.NamedTemporaryFile(delete=False)
+    fp.write(pkg_resources.resource_string(__name__, '__install_deps.py'))
+    fp.close()
 
-  # gksudo ?
-  cmd = ['sudo', 'python3', fp.name]
-  ret = subprocess.call(cmd)
+    # set executable
+    st = os.stat(fp.name)
+    os.chmod(fp.name, st.st_mode | stat.S_IEXEC)
 
-  # remove __install_deps.py
-  try:
-    os.remove(fp.name)
-  except Exception as arg:
-    # tmp files will be removed at reboot
-    pass
+    # gksudo ?
+    cmd = ['sudo', 'python3', fp.name]
+    ret = subprocess.call(cmd)
 
-  if ret != 0:
-    quit()
+    # remove __install_deps.py
+    try:
+      os.remove(fp.name)
+    except Exception as arg:
+      # tmp files will be removed at reboot
+      pass
+
+    if ret != 0:
+      quit()
 
   # install repo
   __print_info("  installing repo:" + "\n")
