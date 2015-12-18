@@ -25,11 +25,15 @@ import __helpers
 from __aac2 import __aac2_compile, __aac2_init, __aac2_sync
 
 if (__name__ == "__main__"):
+  global args
+
   parser = argparse.ArgumentParser()
 
   parser.add_argument("action", help="action", nargs="?", choices=["init", "sync", "compile"])
 
   parser.add_argument("-v", "--verbose", help="be more verbose", action="store_true")
+
+  parser.add_argument("--skip-repo-check", help="stop checking for .repo", action="store_true")
 
   args = parser.parse_args()
 

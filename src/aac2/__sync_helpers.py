@@ -24,6 +24,7 @@ import json
 
 import __cfg
 import __helpers
+import __main__
 
 from __helpers import __print_err, __print_info, __print_ok, _aac2_dir
 
@@ -90,6 +91,16 @@ def readmanifests():
   if (len(_roms) == 0):
     exit(-1)
 
+def repocheck():
+  if (__main__.args.skip_repo_check) != True:
+    __print_info("check .repo: ")
+    sys.stdout.flush()
+    if (os.path.isdir('.repo')):
+      __print_err("fail" + "\n")
+      exit(-1)
+    else:
+      __print_ok("ok" + "\n")
+
 def rom_buffet():
   global _roms
   global romchoix
@@ -138,14 +149,6 @@ def rom_buffet():
 
 def initsync():
   __print_info("initializing sync:" + "\n")
-
-  __print_info("check .repo: ")
-  sys.stdout.flush()
-  if (os.path.isdir('.repo')):
-    __print_err("fail" + "\n")
-    exit(-1)
-  else:
-    __print_ok("ok" + "\n")
 
   ref = None
   inp = input ( __helpers.__osc['info'] + ( "reference path [none]: " ) + __helpers.__osc['end'] )

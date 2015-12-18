@@ -42,6 +42,9 @@ def __aac2_sync():
   # fetch rom manifests
   __sync_helpers.readmanifests()
 
+  # repo check
+  __sync_helpers.repocheck()
+
   # list rom manifests
   __sync_helpers.rom_buffet()
 
