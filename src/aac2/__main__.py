@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Copyright (c) 2015 - thewisenerd <thewisenerd@protonmail.com>
 
 #  This program is free software; you can redistribute it and/or modify
@@ -18,34 +16,35 @@
 #  MA 02110-1301, USA.
 #
 
+import argparse
+import sys
+
 import __cfg
 import __helpers
-import __sync_helpers
 
-from __helpers import __print_ok, __print_info, __print_err, _verbose
+from __aac2 import __aac2_compile, __aac2_init, __aac2_sync
 
-aac = None
+if (__name__ == "__main__"):
+  parser = argparse.ArgumentParser()
 
-def __aac2_init():
-  # signal handlers ?
+  parser.add_argument("action", help="action", nargs="?", choices=["init", "sync", "compile"])
 
-  # fscheck
-  __helpers.fscheck()
+  parser.add_argument("-v", "--verbose", help="be more verbose", action="store_true")
 
-  # check dependencies
-  __helpers.depcheck()
+  args = parser.parse_args()
 
-def __aac2_sync():
-  # init rom manifests
-  __sync_helpers.initmanifests()
+  if args.verbose:
+    __cfg.__verbose = True
 
-  # fetch rom manifests
-  __sync_helpers.readmanifests()
+  if args.action in [None, "init"]:
+    __aac2_init()
+  elif args.action == "sync":
+    __aac2_sync()
+  elif args.action == "compile":
+    __aac2_compile()
+  else:
+    __helpers.__print_err ("something went wrong." + "\n")
+    sys.stdout.flush()
+    exit(-1)
 
-  # list rom manifests
-  __sync_helpers.rom_buffet()
-
-  # init sync
-
-def __aac2_compile():
-  print ( "gee, i have to write 'compile' this yet." )
+  exit()
