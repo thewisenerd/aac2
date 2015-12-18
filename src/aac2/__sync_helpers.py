@@ -18,6 +18,7 @@
 
 import os
 import sys
+import subprocess
 
 import json
 
@@ -27,10 +28,12 @@ import __helpers
 from __helpers import __print_err, __print_info, __print_ok, _aac2_dir
 
 _roms = []
+romchoix = None
+branchchoix = None
 
 def getmanifestsfolder():
   # add support for setting manifests folder
-  return _aac2_dir() + '/' + __cfg.__rom_manifests_folder
+  return os.path.dirname(_aac2_dir()) + '/' + __cfg.__rom_manifests_folder
 
 def _list_valid_manifests():
   return [x for x in os.listdir(getmanifestsfolder()) if x.endswith(".manifest.json")]
@@ -89,6 +92,8 @@ def readmanifests():
 
 def rom_buffet():
   global _roms
+  global romchoix
+  global branchchoix
 
   __print_info ( "-----------------" + "\n" )
   __print_info ( "||ROM Selection||" + "\n" )
@@ -117,7 +122,7 @@ def rom_buffet():
   for [key, branch] in enumerate(_roms[romchoix]['branches']):
     __print_info ( "%02d. %s\n" %  ((key+1), branch['name']) )
   # get a while loop going here; till valid values are got
-  inp = input ( __helpers.__osc['info'] + ( "select %02d-%02d [%02d]: " % (1, len(_roms), 1) ) + __helpers.__osc['end'] )
+  inp = input ( __helpers.__osc['info'] + ( "select %02d-%02d [%02d]: " % (1, len(_roms[romchoix]['branches']), 1) ) + __helpers.__osc['end'] )
   if inp == "":
     branchchoix = 0
   else:
@@ -129,3 +134,42 @@ def rom_buffet():
   __print_info ( "-----------------" + "\n" )
 
   __print_info ( "choice: %s (%s)\n" % (_roms[romchoix]['name'], _roms[romchoix]['branches'][branchchoix]['name']) )
+  __print_info ( "-----------------" + "\n" )
+
+def initsync():
+  __print_info("initializing sync:" + "\n")
+
+  __print_info("check .repo: ")
+  sys.stdout.flush()
+
+  if (os.path.isdir('.repo')):
+    __print_err("fail" + "\n")
+    exit(-1)
+  else:
+    __print_ok("ok" + "\n")
+
+  ref = None
+  inp = input ( __helpers.__osc['info'] + ( "reference path [none]: " ) + __helpers.__osc['end'] )
+  if inp != "":
+    ref = inp
+
+  if ref != None:
+    if os.path.isdir(ref):
+      ref = " --reference=" + ref
+    else:
+      ref = ""
+  else:
+    ref = ""
+
+  cmd = "repo init %s -u %s -b %s" % (ref, _roms[romchoix]['manifest'], _roms[romchoix]['branches'][branchchoix]['name'])
+
+  ret = subprocess.call(cmd, shell=True)
+
+  __print_info("repo init: ")
+  sys.stdout.flush()
+
+  if ret == 0:
+    __print_ok ("ok" + "\n")
+  else:
+    __print_err("fail" + "\n")
+    exit(-1)

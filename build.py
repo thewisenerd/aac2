@@ -14,6 +14,7 @@ config = {
                 ["binaries/repo"],
                 ["src/__install_deps.py", "__install_deps.py"]
               ],
+  "deps"    : ["rom_manifests"],
   "version" : "0.0.1",
   "desc"    : "AndroidAutoCompiler2",
   "author"  : "thewisenerd",
@@ -104,6 +105,13 @@ with open(getdistname(), 'wb') as f:
 print ('chmod ' + getdistname())
 st = os.stat(getdistname())
 os.chmod(getdistname(), st.st_mode | stat.S_IEXEC)
+
+# copy rom_manifests
+# TODO: rewrite this like handling res/
+print ('copying rom_manifests/')
+if os.path.isdir('dist' + os.sep + config['version'] + os.sep + 'rom_manifests'):
+  shutil.rmtree('dist' + os.sep + config['version'] + os.sep + 'rom_manifests')
+shutil.copytree('rom_manifests', 'dist' + os.sep + config['version'] + os.sep + 'rom_manifests')
 
 print ('cleaning build/')
 shutil.rmtree('build')

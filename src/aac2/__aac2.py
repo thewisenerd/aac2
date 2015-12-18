@@ -46,6 +46,7 @@ def __aac2_sync():
   __sync_helpers.rom_buffet()
 
   # init sync
+  __sync_helpers.initsync()
 
 def __aac2_compile():
   print ( "gee, i have to write 'compile' this yet." )
