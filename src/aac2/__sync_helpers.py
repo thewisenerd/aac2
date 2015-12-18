@@ -118,11 +118,12 @@ def repocheck():
     sys.stdout.flush()
     if (os.path.isdir('.repo')):
       __print_err("fail" + "\n")
-      __print_info("it is possible you already have repo init.")
+      __print_info("it is possible you already have repo init.\n")
 
       inp = input ( __helpers.__osc['info'] + ( "do you want to continue (yes/no) [no]: " ) + __helpers.__osc['end'] )
       if inp in ["y", "yes"]:
         startsync()
+        exit(0)
       else:
         exit(-1)
     else:
