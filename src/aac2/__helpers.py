@@ -108,7 +108,8 @@ def depcheck():
   __print_info("    checking previous install... ")
   sys.stdout.flush()
 
-  if which("repo") is None:
+  repo = which("repo")
+  if repo is None:
     __print_err("fail" + "\n")
     sys.stdout.flush()
 
@@ -120,7 +121,8 @@ def depcheck():
     fp.close()
 
     try:
-      shutil.copyfile(fp.name, (os.environ['HOME'] + '/bin/repo'))
+      repo = (os.environ['HOME'] + '/bin/repo')
+      shutil.copyfile(fp.name, repo)
     except Exception as arg:
       __print_err("fail" + "\n")
       sys.stdout.flush()
@@ -129,10 +131,11 @@ def depcheck():
     __print_ok ("ok" + "\n")
   else:
     __print_ok("ok" + "\n")
+    return
 
   # chmod/chown repo
-  st = os.stat((os.environ['HOME'] + '/bin/repo'))
-  os.chmod((os.environ['HOME'] + '/bin/repo'), st.st_mode | stat.S_IEXEC)
+  st = os.stat(repo)
+  os.chmod(repo, st.st_mode | stat.S_IEXEC)
 
   __print_info("    checking path... ")
   # add ~/bin/repo to path?
