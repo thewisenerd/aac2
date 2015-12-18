@@ -73,7 +73,7 @@ def depcheck():
   __print_info("  getting root... ")
   sys.stdout.flush()
   # gksudo ?
-  cmd = ['sudo', 'python3', _aac2_dir() + '/__install_dependencies.py']
+  cmd = ['sudo', 'python3', os.path.dirname(_aac2_dir()) + '/__install_deps.py']
   ret = subprocess.call(cmd)
   if ret != 0:
     quit()
