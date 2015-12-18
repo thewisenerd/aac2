@@ -88,8 +88,12 @@ def __install_deps():
   ]
 
   for pkg_name in deps:
-    pkg = cache[pkg_name]
     __print_info ( "    {pkg_name}... ".format(pkg_name=pkg_name) )
+    try:
+      pkg = cache[pkg_name]
+    except Exception as arg:
+      __print_err("fail" + "\n")
+      exit(-1)
     sys.stdout.flush()
     if pkg.is_installed:
       __print_ok ( "ok" + "\n")
