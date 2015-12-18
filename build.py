@@ -94,7 +94,7 @@ except Exception as arg:
   if arg.errno == 17:
     pass
   else:
-    quit(-1)
+    exit(-1)
 
 with open(getdistname(), 'wb') as f:
   f.write(bytes('#!/usr/bin/env python3\n', 'UTF-8'))
