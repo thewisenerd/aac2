@@ -22,6 +22,9 @@ import subprocess
 import sys
 import os
 
+import pkg_resources
+import tempfile
+
 from inspect import getsourcefile
 
 import __cfg
@@ -72,9 +75,27 @@ def depcheck():
   __print_info("checking dependencies:" + "\n")
   __print_info("  getting root... ")
   sys.stdout.flush()
+
+  # extract __install_deps.py
+  fp = tempfile.NamedTemporaryFile(delete=False)
+  fp.write(pkg_resources.resource_string(__name__, '__install_deps.py'))
+  fp.close()
+
+  # set executable
+  st = os.stat(fp.name)
+  os.chmod(fp.name, st.st_mode | stat.S_IEXEC)
+
   # gksudo ?
-  cmd = ['sudo', 'python3', os.path.dirname(_aac2_dir()) + '/__install_deps.py']
+  cmd = ['sudo', 'python3', fp.name]
   ret = subprocess.call(cmd)
+
+  # remove __install_deps.py
+  try:
+    os.remove(fp.name)
+  except Exception as arg:
+    # tmp files will be removed at reboot
+    pass
+
   if ret != 0:
     quit()
 
@@ -91,11 +112,16 @@ def depcheck():
     # new install repo
     __print_info("    installing repo... ")
 
+    fp = tempfile.NamedTemporaryFile(delete=False)
+    fp.write(pkg_resources.resource_string(__name__, 'binaries/repo'))
+    fp.close()
+
     try:
-      shutil.copyfile((_aac2_dir() + '/binaries/repo'), (os.environ['HOME'] + '/bin/repo'))
+      shutil.copyfile(fp.name, (os.environ['HOME'] + '/bin/repo'))
     except Exception as arg:
       __print_err("fail" + "\n")
       sys.stdout.flush()
+      print (arg)
       exit(-1)
     __print_ok ("ok" + "\n")
   else:
