@@ -21,8 +21,13 @@
 import os
 import sys
 
-import apt
 import time
+
+try:
+  import apt
+except Exception as arg:
+  __print_err("fail" + "\n")
+  exit(-1)
 
 def __print_ok(_str):
   print ('\033[32m' + _str + '\033[39m', end='')
