@@ -91,13 +91,40 @@ def readmanifests():
   if (len(_roms) == 0):
     exit(-1)
 
+def startsync():
+  syncjobs = 4
+  inp = input ( __helpers.__osc['info'] + ( "sync jobs[%d]: " % (syncjobs) ) + __helpers.__osc['end'] )
+  if inp != "":
+    try:
+      syncjobs = int(inp)
+    except Exception as arg:
+      syncjobs = 4
+      pass
+
+  cmd = "repo sync -j%d" % syncjobs
+
+  __print_info("starting sync: " + "\n")
+  ret = subprocess.call(cmd, shell=True)
+
+  if ret == 0:
+    __print_ok ("ok" + "\n")
+  else:
+    __print_err("fail" + "\n")
+    exit(-1)
+
 def repocheck():
   if (__main__.args.skip_repo_check) != True:
     __print_info("check .repo: ")
     sys.stdout.flush()
     if (os.path.isdir('.repo')):
       __print_err("fail" + "\n")
-      exit(-1)
+      __print_info("it is possible you already have repo init.")
+
+      inp = input ( __helpers.__osc['info'] + ( "do you want to continue (yes/no) [no]: " ) + __helpers.__osc['end'] )
+      if inp in ["y", "yes"]:
+        startsync()
+      else:
+        exit(-1)
     else:
       __print_ok("ok" + "\n")
 
@@ -176,22 +203,4 @@ def initsync():
     __print_err("fail" + "\n")
     exit(-1)
 
-  syncjobs = 4
-  inp = input ( __helpers.__osc['info'] + ( "sync jobs[%d]: " % (syncjobs) ) + __helpers.__osc['end'] )
-  if inp != "":
-    try:
-      syncjobs = int(inp)
-    except Exception as arg:
-      syncjobs = 4
-      pass
-
-  cmd = "repo sync -j%d" % syncjobs
-
-  __print_info("starting sync: " + "\n")
-  ret = subprocess.call(cmd, shell=True)
-
-  if ret == 0:
-    __print_ok ("ok" + "\n")
-  else:
-    __print_err("fail" + "\n")
-    exit(-1)
+  startsync()
