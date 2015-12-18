@@ -141,7 +141,6 @@ def initsync():
 
   __print_info("check .repo: ")
   sys.stdout.flush()
-
   if (os.path.isdir('.repo')):
     __print_err("fail" + "\n")
     exit(-1)
@@ -165,8 +164,24 @@ def initsync():
 
   ret = subprocess.call(cmd, shell=True)
 
-  __print_info("repo init: ")
+  __print_info("repo init... ")
   sys.stdout.flush()
+
+  if ret == 0:
+    __print_ok ("ok" + "\n")
+  else:
+    __print_err("fail" + "\n")
+    exit(-1)
+
+  syncjobs = 4
+  inp = input ( __helpers.__osc['info'] + ( "sync jobs[%d]: " % (syncjobs) ) + __helpers.__osc['end'] )
+  if inp != "":
+    ref = int(inp)
+
+  cmd = "repo sync -j%d" % syncjobs
+
+  __print_info("starting sync: " + "\n")
+  ret = subprocess.call(cmd, shell=True)
 
   if ret == 0:
     __print_ok ("ok" + "\n")
