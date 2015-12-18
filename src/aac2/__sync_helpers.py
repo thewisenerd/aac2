@@ -176,7 +176,11 @@ def initsync():
   syncjobs = 4
   inp = input ( __helpers.__osc['info'] + ( "sync jobs[%d]: " % (syncjobs) ) + __helpers.__osc['end'] )
   if inp != "":
-    ref = int(inp)
+    try:
+      syncjobs = int(inp)
+    except Exception as arg:
+      syncjobs = 4
+      pass
 
   cmd = "repo sync -j%d" % syncjobs
 
