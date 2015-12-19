@@ -106,6 +106,9 @@ def __install_deps():
         exit(-1)
       __print_ok ( "ok" + "\n")
 
+      # re-open cache
+      cache.open(None)
+
 def app():
   check_root()
 
